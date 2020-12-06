@@ -1,0 +1,4 @@
+.cover__overlay {
+    display: flex;
+    flex-direction: column;
+}

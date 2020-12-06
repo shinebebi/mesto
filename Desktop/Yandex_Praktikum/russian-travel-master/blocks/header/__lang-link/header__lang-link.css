@@ -1,0 +1,6 @@
+.header__lang-link {
+    color: white;
+}
+.header__lang-link:hover {
+    opacity: 0.3;
+}
