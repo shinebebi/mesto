@@ -1,7 +1,7 @@
 .footer__link {
     font-size: 16px;
     line-height: 1.12;
-    max-width: 110px;
+    word-wrap: break-word;
     color: white;
     text-decoration: none;
 }
