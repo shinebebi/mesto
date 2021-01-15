@@ -1,0 +1,5 @@
+.profile__user-profession {
+    font-size: 18px;
+    line-height: 22px;
+    grid-column: 1/3;
+}
