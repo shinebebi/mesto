@@ -1,0 +1,10 @@
+.elements {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 32%);
+    grid-template-rows: repeat(auto-fill, 1fr);
+    gap: 20px 17px;
+    margin: auto;
+    margin-top: 50px;
+    width: 68.75%;
+    justify-content: center;
+}
