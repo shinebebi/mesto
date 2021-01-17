@@ -4,4 +4,7 @@
     line-height: 1.14;
     margin-top: 0;
     margin-bottom: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
