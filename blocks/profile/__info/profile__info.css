@@ -7,3 +7,12 @@
     margin-left: 30px;
     margin-top: 22px;
 }
+@media screen and (max-width: 700px) {
+    .profile__info {
+        grid-template-rows: minmax(26px, 37px) 14px;
+        grid-template-columns: 189px 18px;
+        column-gap: 10px;
+        max-height: 54px;
+        margin: 0 auto 0 auto;
+    }
+}
