@@ -1,0 +1,14 @@
+.popup__submit-btn {
+    margin: 18px auto 37px auto;
+    width: 358px;
+    height: 50px;
+    text-align: center;
+    background: #000000;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 22px;
+    border: none;
+    border-radius: 2px;
+    padding-top: 14px;
+    padding-bottom: 18px;
+}

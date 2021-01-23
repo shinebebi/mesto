@@ -1,4 +1,5 @@
 .profile__add-btn {
+    background: url(../../../images/add-button.svg) center no-repeat;
     margin: auto 0 auto auto;
     border: 2px solid #FFFFFF;
     box-sizing: border-box;
