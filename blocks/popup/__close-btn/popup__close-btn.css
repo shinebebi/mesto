@@ -6,3 +6,11 @@
     width: 40px;
     border: none;
 }
+@media screen and (max-width: 600px) {
+    .popup__close-btn {
+        width: 26px;
+        height: 26px;
+        margin-left: 260px;
+        margin-bottom: 13.6px;
+    }
+}

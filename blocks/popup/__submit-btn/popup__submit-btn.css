@@ -12,3 +12,13 @@
     padding-top: 14px;
     padding-bottom: 18px;
 }
+@media screen and (max-width: 600px) {
+    .popup__submit-btn {
+        margin: 15px auto 25px auto;
+        width: 238px;
+        height: 46px;
+        font-size: 14px;
+        line-height: 17px;
+        padding-bottom: 14px;
+    }
+}

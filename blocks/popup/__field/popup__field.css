@@ -8,3 +8,9 @@
     height: 27px;
     border-bottom: 1px solid rgb(0, 0, 0, 0.2);
 }
+@media screen and (max-width: 600px) {
+    .popup__field {
+        width: 84.4%;
+        margin: 0 auto 30px auto;
+    }
+}

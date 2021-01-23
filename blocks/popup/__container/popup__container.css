@@ -8,3 +8,10 @@
     height: 330px;
     color: #000000;
 }
+@media screen and (max-width: 600px) {
+    .popup__container {
+        width: 282px;
+        height: 322px;
+        justify-content: center;
+    }
+}
