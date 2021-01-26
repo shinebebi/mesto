@@ -21,7 +21,6 @@ function handleFormSubmit (evt) {
     editJob.textContent = jobInput.value;
     editProfile()
 }
-submitBtn.addEventListener('submit', handleFormSubmit);
 editBtn.addEventListener('click', editProfile);
 formElement.addEventListener('submit', handleFormSubmit);
 closeBtn.addEventListener('click', closeProfile);
