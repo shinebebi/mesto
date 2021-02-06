@@ -8,6 +8,7 @@ const closeBtn_place = document.querySelector('.popup__close-btn_place');
 let formElement_profile = document.querySelector('.popup__container_profile');
 const formElement_place = document.querySelector('.popup__container_place');
 let nameInput = formElement_profile.querySelector('.popup__field_user-name');
+const trashBtn = document.querySelector('.element__trash-btn');
 let jobInput = formElement_profile.querySelector('.popup__field_user-job');
 const placeInput = formElement_place.querySelector('.popup__field_place-name');
 const linkInput = formElement_place.querySelector('.popup__field_place-link');
@@ -43,19 +44,20 @@ const initialCards = [
       link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
   ];
-
 initialCards.forEach(function (elem) {
 const initialCards_element = elementTemplate.cloneNode(true);
-
 initialCards_element.querySelector('.element__name').textContent = elem.name;
 initialCards_element.querySelector('.element__photo').src = elem.link;
 initialCards_element.querySelector('.element__like-btn').addEventListener('click', function (evt) {
     evt.target.classList.toggle('element__like-btn_active');
     });
-
+initialCards_element.querySelector('.element__trash-btn').addEventListener('click', function(evt) {
+    evt.target.classList.add('element_delete');
+    let delElem = document.querySelector('.element_delete').closest('.element');
+    delElem.remove();
+})
 elements.append(initialCards_element);
 });
-
 function popupOpen_profile() {
     popupProfile.classList.toggle('popup_opened');
 }
@@ -64,8 +66,8 @@ function popupOpen_place() {
 }
 function popupClose_place() {
     popupOpen_place()
-    placeInput.value = ''
-    linkInput.value =''
+    placeInput.value = '';
+    linkInput.value ='';
 }
 function editProfile () {
     popupOpen_profile()
@@ -89,10 +91,14 @@ function placeForm (evt) {
         evt.target.classList.toggle('element__like-btn_active');
         });
     elements.prepend(initialCards_element);
-    placeInput.value = ''
-    linkInput.value =''
-}
-
+    placeInput.value = '';
+    linkInput.value ='';
+    document.querySelector('.element__trash-btn').addEventListener('click', function(evt) {
+        evt.target.classList.add('element_delete');
+        let delElem = document.querySelector('.element_delete').closest('.element');
+        delElem.remove();
+    })
+};
 addBtn.addEventListener('click', popupOpen_place);
 editBtn.addEventListener('click', editProfile);
 formElement_profile.addEventListener('submit', handleFormSubmit);
