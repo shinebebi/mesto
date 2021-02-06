@@ -3,11 +3,14 @@ let addBtn = document.querySelector('.profile__add-btn');
 let editName = document.querySelector('.profile__user-name');
 let editJob = document.querySelector('.profile__user-profession')
 
-let closeBtn = document.querySelector('.popup__close-btn');
-let submitBtn = document.querySelector('.popup__submit-btn');
-let formElement = document.querySelector('.popup__container');
-let nameInput = formElement.querySelector('.popup__user-name');
-let jobInput = formElement.querySelector('.popup__user-job');
+const closeBtn_profile = document.querySelector('.popup__close-btn_profile');
+const closeBtn_place = document.querySelector('.popup__close-btn_place');
+let formElement_profile = document.querySelector('.popup__container_profile');
+const formElement_place = document.querySelector('.popup__container_place');
+let nameInput = formElement_profile.querySelector('.popup__field_user-name');
+let jobInput = formElement_profile.querySelector('.popup__field_user-job');
+const placeInput = formElement_place.querySelector('.popup__field_place-name');
+const linkInput = formElement_place.querySelector('.popup__field_place-link');
 let popupProfile = document.querySelector('.popup_profile');
 let popupPlace = document.querySelector('.popup_place');
 
@@ -48,7 +51,7 @@ initialCards_element.querySelector('.element__name').textContent = elem.name;
 initialCards_element.querySelector('.element__photo').src = elem.link;
 
 elements.append(initialCards_element);
-})
+});
 
 function popupOpen_profile() {
     popupProfile.classList.toggle('popup_opened');
@@ -62,16 +65,26 @@ function editProfile () {
     nameInput.value = editName.textContent;
     jobInput.value = editJob.textContent;
 }
-
 function handleFormSubmit (evt) {
     evt.preventDefault();
     editName.textContent = nameInput.value;
     editJob.textContent = jobInput.value;
     editProfile()
 }
-
+function placeForm (evt) {
+    evt.preventDefault();
+    popupOpen_place()
+    initialCards.unshift({name: placeInput.value, link: linkInput.value});
+    const initialCards_element = elementTemplate.cloneNode(true);
+    initialCards_element.querySelector('.element__name').textContent = initialCards[0].name;
+    initialCards_element.querySelector('.element__photo').src = initialCards[0].link;
+    elements.prepend(initialCards_element);
+}
 
 addBtn.addEventListener('click', popupOpen_place);
 editBtn.addEventListener('click', editProfile);
-formElement.addEventListener('submit', handleFormSubmit);
-closeBtn.addEventListener('click', popupOpen_profile);
+formElement_profile.addEventListener('submit', handleFormSubmit);
+formElement_place.addEventListener('submit', placeForm);
+closeBtn_profile.addEventListener('click', popupOpen_profile);
+closeBtn_place.addEventListener('click', popupOpen_place);
+console.log(initialCards);
