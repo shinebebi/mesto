@@ -49,6 +49,9 @@ const initialCards_element = elementTemplate.cloneNode(true);
 
 initialCards_element.querySelector('.element__name').textContent = elem.name;
 initialCards_element.querySelector('.element__photo').src = elem.link;
+initialCards_element.querySelector('.element__like-btn').addEventListener('click', function (evt) {
+    evt.target.classList.toggle('element__like-btn_active');
+    });
 
 elements.append(initialCards_element);
 });
@@ -59,7 +62,11 @@ function popupOpen_profile() {
 function popupOpen_place() {
     popupPlace.classList.toggle('popup_opened');
 }
-
+function popupClose_place() {
+    popupOpen_place()
+    placeInput.value = ''
+    linkInput.value =''
+}
 function editProfile () {
     popupOpen_profile()
     nameInput.value = editName.textContent;
@@ -78,7 +85,12 @@ function placeForm (evt) {
     const initialCards_element = elementTemplate.cloneNode(true);
     initialCards_element.querySelector('.element__name').textContent = initialCards[0].name;
     initialCards_element.querySelector('.element__photo').src = initialCards[0].link;
+    initialCards_element.querySelector('.element__like-btn').addEventListener('click', function (evt) {
+        evt.target.classList.toggle('element__like-btn_active');
+        });
     elements.prepend(initialCards_element);
+    placeInput.value = ''
+    linkInput.value =''
 }
 
 addBtn.addEventListener('click', popupOpen_place);
@@ -86,5 +98,4 @@ editBtn.addEventListener('click', editProfile);
 formElement_profile.addEventListener('submit', handleFormSubmit);
 formElement_place.addEventListener('submit', placeForm);
 closeBtn_profile.addEventListener('click', popupOpen_profile);
-closeBtn_place.addEventListener('click', popupOpen_place);
-console.log(initialCards);
+closeBtn_place.addEventListener('click', popupClose_place);
