@@ -48,13 +48,26 @@ initialCards.forEach(function (elem) {
 const initialCards_element = elementTemplate.cloneNode(true);
 initialCards_element.querySelector('.element__name').textContent = elem.name;
 initialCards_element.querySelector('.element__photo').src = elem.link;
+initialCards_element.querySelector('.photo-popup__img').src = elem.link;
+initialCards_element.querySelector('.photo-popup__header').textContent = elem.name;
 initialCards_element.querySelector('.element__like-btn').addEventListener('click', function (evt) {
     evt.target.classList.toggle('element__like-btn_active');
     });
 initialCards_element.querySelector('.element__trash-btn').addEventListener('click', function(evt) {
     evt.target.classList.add('element_delete');
-    let delElem = document.querySelector('.element_delete').closest('.element');
+    const delElem = document.querySelector('.element_delete').closest('.element');
     delElem.remove();
+})
+initialCards_element.querySelector('.element__photo').addEventListener('click', function(evt) {
+    const openPhoto = evt.target;
+    const photoPopup = openPhoto.closest('.element');
+    const openPhoto_popup = photoPopup.querySelector('.photo-popup');
+    openPhoto_popup.classList.toggle('popup_opened');
+})
+initialCards_element.querySelector('.photo-popup__close-btn').addEventListener('click', function(evt) {
+    const closeBtn = evt.target;
+    const closePopup = closeBtn.closest('.photo-popup')
+    closePopup.classList.toggle('popup_opened');
 })
 elements.append(initialCards_element);
 });
@@ -87,6 +100,8 @@ function placeForm (evt) {
     const initialCards_element = elementTemplate.cloneNode(true);
     initialCards_element.querySelector('.element__name').textContent = initialCards[0].name;
     initialCards_element.querySelector('.element__photo').src = initialCards[0].link;
+    initialCards_element.querySelector('.photo-popup__img').src = initialCards[0].link;
+    initialCards_element.querySelector('.photo-popup__header').textContent = initialCards[0].name;
     initialCards_element.querySelector('.element__like-btn').addEventListener('click', function (evt) {
         evt.target.classList.toggle('element__like-btn_active');
         });
@@ -95,8 +110,19 @@ function placeForm (evt) {
     linkInput.value ='';
     document.querySelector('.element__trash-btn').addEventListener('click', function(evt) {
         evt.target.classList.add('element_delete');
-        let delElem = document.querySelector('.element_delete').closest('.element');
+        const delElem = document.querySelector('.element_delete').closest('.element');
         delElem.remove();
+    })
+    document.querySelector('.element__photo').addEventListener('click', function(evt) {
+        const openPhoto = evt.target;
+        const photoPopup = openPhoto.closest('.element');
+        const openPhoto_popup = photoPopup.querySelector('.photo-popup');
+        openPhoto_popup.classList.toggle('popup_opened');
+    })
+    document.querySelector('.photo-popup__close-btn').addEventListener('click', function(evt) {
+        const closeBtn = evt.target;
+        const closePopup = closeBtn.closest('.photo-popup')
+        closePopup.classList.toggle('popup_opened');
     })
 };
 addBtn.addEventListener('click', popupOpen_place);
