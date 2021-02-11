@@ -64,6 +64,7 @@ function createCard (elem) {
         const headerPopup = photoPopup.querySelector('.element__name');
         document.querySelector('.photo-popup__img').src = openPhoto.src;
         document.querySelector('.photo-popup__header').textContent = headerPopup.textContent;
+        document.querySelector('.photo-popup__img').alt = openPhoto.alt;
         openPopup(popupPhoto);
     });
     document.querySelector('.photo-popup__close-btn').addEventListener('click', function () {
