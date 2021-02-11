@@ -8,6 +8,15 @@
         <title>Mesto</title>
     </head>
     <body class="page">
+        <section class="popup photo-popup">
+            <button class="popup__close-btn photo-popup__close-btn"></button>
+            <div class="photo-popup__container">
+                <img class="photo-popup__img">
+                <h4 class="photo-popup__header">
+                    
+                </h4>
+            </div>
+        </section>
         <section class="popup popup_profile">
             <button class="popup__close-btn popup__close-btn_profile" type="button"></button>
             <form class="popup__container popup__container_profile" name="user-info">
@@ -49,23 +58,13 @@
         <template class="element-template">
             <div class="element">
                 <button class="element__trash-btn" type="button"></button>
-                <img class="element__photo" alt="фото пользователя">
+                <img class="element__photo">
                 <div class="element__description">
                     <h4 class="element__name">
 
                     </h4>
                     <button class="element__like-btn" type="button"></button>
                 </div>
-                <div class="popup photo-popup">
-                    <button class="photo-popup__close-btn"></button>
-                    <div class="photo-popup__container">
-                        <img class="photo-popup__img" alt="фото пользователя">
-                        <h4 class="photo-popup__header">
-                            
-                        </h4>
-                    </div>
-                </div>
-            </div>
         </template>
         <script src="script/script.js"></script>
     </body>
