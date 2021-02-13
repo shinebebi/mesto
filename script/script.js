@@ -15,6 +15,9 @@ const popupProfile = document.querySelector('.popup_profile');
 const popupPlace = document.querySelector('.popup_place');
 
 const popupPhoto = document.querySelector('.photo-popup');
+const photoPopupImg = document.querySelector('.photo-popup__img');
+const photoPopupHeader = document.querySelector('.photo-popup__header');
+const closePhotoPopupBtn = document.querySelector('.photo-popup__close-btn');
 
 const elements = document.querySelector('.elements');
 const elementTemplate = document.querySelector('.element-template').content;
@@ -58,17 +61,11 @@ function createCard (elem) {
     newCard.querySelector('.element__trash-btn').addEventListener('click', function(evt) {
         evt.target.closest('.element').remove();
     });
-    elementPhoto.addEventListener('click', function (evt) {
-        const openPhoto = evt.target;
-        const photoPopup = openPhoto.closest('.element');
-        const headerPopup = photoPopup.querySelector('.element__name');
-        document.querySelector('.photo-popup__img').src = openPhoto.src;
-        document.querySelector('.photo-popup__header').textContent = headerPopup.textContent;
-        document.querySelector('.photo-popup__img').alt = openPhoto.alt;
+    elementPhoto.addEventListener('click', function() {
+        photoPopupImg.src = elem.link;
+        photoPopupHeader.textContent = elem.name;
+        photoPopupImg.alt = elem.name;
         openPopup(popupPhoto);
-    });
-    document.querySelector('.photo-popup__close-btn').addEventListener('click', function () {
-        closePopup(popupPhoto);
     });
     return newCard;
 };
@@ -115,9 +112,13 @@ function closePlace() {
     linkInput.value ='';
 };
 
+
 addBtn.addEventListener('click', openPlace);
 editBtn.addEventListener('click', editProfile);
 formProfile.addEventListener('submit', handleFormProfileSubmit);
 formPlace.addEventListener('submit', handleFormPlaceSubmit);
 closingProfile.addEventListener('click', closeProfile);
 closingPlace.addEventListener('click', closePlace);
+closePhotoPopupBtn.addEventListener('click', function () {
+    closePopup(popupPhoto);
+});
