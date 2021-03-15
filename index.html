@@ -28,16 +28,18 @@
                 <button class="popup__submit-btn" type="submit">Сохранить</button>
             </form>
         </section>
-        <section class="popup popup_place">
-            <button class="popup__close-btn popup__close-btn_place" type="button"></button>
-            <form class="popup__container popup__container_place" name="place-info" novalidate>
-                <h3 class="popup__header">Новое место</h3>
-                <input class="popup__field popup__field_place-name" type="text" placeholder="Название" name="place-name" minlength="2" maxlength="30" required>
-                <span class="popup__input-error place-name-error"></span>
-                <input class="popup__field popup__field_place-link" type="url" placeholder="Ссылка на картинку" name="place-link" required>
-                <span class="popup__input-error place-link-error"></span>
-                <button class="popup__submit-btn" type="submit">Создать</button>
-            </form>
+        <section class="overlay">
+            <section class="popup popup_place">
+                <button class="popup__close-btn popup__close-btn_place" type="button"></button>
+                <form class="popup__container popup__container_place" name="place-info" novalidate>
+                    <h3 class="popup__header">Новое место</h3>
+                    <input class="popup__field popup__field_place-name" type="text" placeholder="Название" name="place-name" minlength="2" maxlength="30" required>
+                    <span class="popup__input-error place-name-error"></span>
+                    <input class="popup__field popup__field_place-link" type="url" placeholder="Ссылка на картинку" name="place-link" required>
+                    <span class="popup__input-error place-link-error"></span>
+                    <button class="popup__submit-btn" type="submit">Создать</button>
+                </form>
+            </section>
         </section>
         <header class="header">
             <img class="header__logo" src="images/header-logo.svg" alt="лого">

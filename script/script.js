@@ -166,8 +166,10 @@ popupPhoto.addEventListener('click', function(evt) {
     closePopup(evt.target);
 })
 popupPlace.addEventListener('click', function(evt) {
-    closePlace(evt.target);
+    closePopup(evt.target)
+    clearPlace();
 })
 popupProfile.addEventListener('click', function(evt) {
-    closeProfile(evt.target);
-})
+    closePopup(evt.target)
+    clearProfile();
+});
