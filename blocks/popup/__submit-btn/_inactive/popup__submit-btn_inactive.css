@@ -1,0 +1,8 @@
+.popup__submit-btn_inactive {
+    border: 1px solid #C4C4C4;
+    color: #C4C4C4;
+    background-color: #ffffff;
+}
+.popup__submit-btn_inactive:hover {
+    background-color: rgb(255, 255, 255);
+}
