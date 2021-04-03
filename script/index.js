@@ -11,7 +11,6 @@ const placeInput = formPlace.querySelector('.popup__field_place-name');
 const linkInput = formPlace.querySelector('.popup__field_place-link');
 const popupProfile = document.querySelector('.popup_profile');
 const popupPlace = document.querySelector('.popup_place');
-const submBtnPlace = document.querySelector('.popup__submit-btn_place');
 const popups = document.querySelectorAll('.popup')
 
 const popupPhoto = document.querySelector('.photo-popup');
@@ -19,9 +18,8 @@ const photoPopupImg = document.querySelector('.photo-popup__img');
 const photoPopupHeader = document.querySelector('.photo-popup__header');
 
 const elements = document.querySelector('.elements');
-const elementTemplate = document.querySelector('.element-template').content;
 
-const object =  {
+const object = {
     formElement: '.popup__container',
     inputElement: '.popup__field',
     submitButtonSelector: '.popup__submit-btn',
@@ -61,25 +59,27 @@ const initialCards = [
 import {Card} from "./Card.js";
 import {FormValidator} from "./FormValidator.js"
 
-const profile = new FormValidator(object, formProfile);
-profile.enableValidation()
+const profileValidator = new FormValidator(object, formProfile);
+profileValidator.enableValidation()
 
-const place = new FormValidator(object, formPlace);
-place.enableValidation()
+const placeValidator = new FormValidator(object, formPlace);
+placeValidator.enableValidation()
+
+function createCard(elem) {
+    const card = new Card(elem, '.element-template', handleCardClick);
+    return card.generateCard();
+}
 
 initialCards.forEach(elem => {
-    const card = new Card(elem, '.element-template');
-    const cardElement = card.generateCard();
-    document.querySelector('.elements').append(cardElement);
+    elements.append(createCard(elem));
 })
 
-function deleteErrors(popup) {
-    const errorList = Array.from(popup.querySelectorAll('.popup__input-error'))
-    errorList.forEach((elem) => {
-        elem.textContent = ''
-        elem.classList.remove('popup__input-error_active');
-    })
-};
+function handleCardClick(name, link) {
+    photoPopupImg.src = link;
+    photoPopupHeader.textContent = name;
+    photoPopupImg.alt = name;
+    openPopup(popupPhoto)
+}
 
 function closePopup(popupElement) {
     popupElement.classList.remove('popup_opened');
@@ -100,12 +100,10 @@ function openPopup(popupElement) {
 };
 
 function editProfile() {
-    formProfile.querySelector('.popup__submit-btn').classList.remove('popup__submit-btn_inactive');
-    formProfile.querySelector('.popup__submit-btn').removeAttribute('disabled');
-    deleteErrors(popupProfile);
     openPopup(popupProfile);
     nameInput.value = editName.textContent;
     jobInput.value = editJob.textContent;
+    profileValidator.resetValidation()
 };
 
 function handleFormProfileSubmit(evt) {
@@ -116,24 +114,16 @@ function handleFormProfileSubmit(evt) {
 };
 
 function openPlace() {
-    clearPlace();
+    placeValidator.resetValidation()
+    formOfPlace.reset();
     openPopup(popupPlace);
-    submBtnPlace.classList.add('popup__submit-btn_inactive');
-    submBtnPlace.setAttribute('disabled', 'disabled');
 };
 
 function handleFormPlaceSubmit(evt) {
     evt.preventDefault();
     closePopup(popupPlace)
-    const card = new Card({name: placeInput.value, link: linkInput.value}, '.element-template');
-    const cardElement = card.generateCard();
-    document.querySelector('.elements').prepend(cardElement);
+    elements.prepend(createCard({name: placeInput.value, link: linkInput.value}));
     formOfPlace.reset();
-};
-
-function clearPlace() {
-    formOfPlace.reset();
-    deleteErrors(popupPlace)
 };
 
 addBtn.addEventListener('click', openPlace);
