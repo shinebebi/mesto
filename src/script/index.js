@@ -22,7 +22,7 @@ const object = {
     inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__input-error_active'
 };
-
+import '../pages/index.css';
 const initialCards = [
     {
         name: 'Архыз',
@@ -50,8 +50,8 @@ const initialCards = [
     }
 ];
 
-import {Card} from "./components/Card.js";
-import {FormValidator} from "./components/FormValidator.js"
+import Card from "./components/Card.js";
+import FormValidator from "./components/FormValidator.js"
 import Section from "./components/Section.js"
 import PopupWithImage from "./components/PopupWithImage.js"
 import PopupWithForm from "./components/PopupWithForm.js";

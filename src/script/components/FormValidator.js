@@ -1,4 +1,4 @@
-class FormValidator {
+export default class FormValidator {
     constructor(obj, form) {
         this._formElement = obj.formElement;
         this._inputElement = obj.inputElement;
@@ -18,17 +18,17 @@ class FormValidator {
         this._toggleButtonState();
     }
 
-    enableValidation = () => {
+    enableValidation() {
         this._setEventListeners();
     }
-    _setEventListeners = () => {
+    _setEventListeners() {
         this._toggleButtonState()
         this._inputList.forEach(inputElement => {
             inputElement.addEventListener('input', this._checkInputValidity);
             inputElement.addEventListener('input', this._toggleButtonState)
         });
     }
-    _toggleButtonState = () => {
+    _toggleButtonState() {
         if (this._hasInvalidInput()) {
             this._submitButton.classList.add(this._inactiveButtonClass);
             this._submitButton.setAttribute('disabled', 'disabled');
@@ -38,13 +38,13 @@ class FormValidator {
         }
     }
 
-    _hasInvalidInput = () => {
+    _hasInvalidInput() {
         return this._inputList.some(inputElement => {
             return !inputElement.validity.valid;
         });
     }
 
-    _checkInputValidity = () => {
+    _checkInputValidity() {
         this._inputList.forEach(inputElement => {
             if (!inputElement.validity.valid) {
                 this._showInputError(inputElement);
@@ -54,17 +54,15 @@ class FormValidator {
         })
     }
 
-    _showInputError = (inputElement) => {
+    _showInputError(inputElement) {
         const errorElement = this._form.querySelector(`.${inputElement.name}-error`)
         errorElement.textContent = inputElement.validationMessage;
         errorElement.classList.add(this._errorClass);
     }
 
-    _hideInputError = (inputElement) => {
+    _hideInputError(inputElement) {
         const errorElement = this._form.querySelector(`.${inputElement.name}-error`)
         errorElement.textContent = '';
         errorElement.classList.remove(this._errorClass);
     }
 }
-
-export {FormValidator} ;
