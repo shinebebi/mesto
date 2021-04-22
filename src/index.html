@@ -7,7 +7,7 @@
     <title>Mesto</title>
 </head>
 <body class="page">
-<section class="popup photo-popup">
+<article class="popup photo-popup">
     <button class="popup__close-btn photo-popup__close-btn"></button>
     <div class="photo-popup__container">
         <img class="photo-popup__img" src=" " alt="фото пользователя">
@@ -15,8 +15,8 @@
 
         </h4>
     </div>
-</section>
-<section class="popup popup_profile">
+</article>
+<article class="popup popup_profile">
     <button class="popup__close-btn popup__close-btn_profile" type="button"></button>
     <form class="popup__container popup__container_profile" name="user-info" novalidate>
         <h3 class="popup__header">Редактировать профиль</h3>
@@ -28,8 +28,8 @@
         <span class="popup__input-error userjob-error"></span>
         <button class="popup__submit-btn" type="submit">Сохранить</button>
     </form>
-</section>
-<section class="popup popup_place">
+</article>
+<article class="popup popup_place">
     <button class="popup__close-btn popup__close-btn_place" type="button"></button>
     <form class="popup__container popup__container_place" name="placeinfo" novalidate>
         <h3 class="popup__header">Новое место</h3>
@@ -41,7 +41,7 @@
         <span class="popup__input-error link-error"></span>
         <button class="popup__submit-btn_place popup__submit-btn" type="submit">Создать</button>
     </form>
-</section>
+</article>
 <header class="header">
     <img class="header__logo" src="<%=require('./images/header-logo.svg')%>" alt="лого">
 </header>
@@ -74,6 +74,5 @@
         </div>
     </div>
 </template>
-<script type="module" src="./src/script/index.js"></script>
 </body>
 </html>

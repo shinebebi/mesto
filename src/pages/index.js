@@ -1,28 +1,30 @@
+import '../pages/index.css';
+import Card from "../components/Card.js";
+import {FormValidator} from "../components/FormValidator.js"
+import Section from "../components/Section.js"
+import PopupWithImage from "../components/PopupWithImage.js"
+import PopupWithForm from "../components/PopupWithForm.js";
+import UserInfo from "../components/UserInfo.js";
+
+
 const editBtn = document.querySelector('.profile__edit-btn');
 const addBtn = document.querySelector('.profile__add-btn');
-const editName = document.querySelector('.profile__user-name');
-const editJob = document.querySelector('.profile__user-profession');
-
 const formProfile = document.querySelector('.popup__container_profile');
 const formPlace = document.querySelector('.popup__container_place');
 const nameInput = formProfile.querySelector('.popup__field_user-name');
 const jobInput = formProfile.querySelector('.popup__field_user-job');
 const popupProfile = document.querySelector('.popup_profile');
 const popupPlace = document.querySelector('.popup_place');
-
 const popupPhoto = document.querySelector('.photo-popup');
-
 const elements = document.querySelector('.elements');
 
-const object = {
-    formElement: '.popup__container',
+const validationConfig = {
     inputElement: '.popup__field',
     submitButtonSelector: '.popup__submit-btn',
     inactiveButtonClass: 'popup__submit-btn_inactive',
-    inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__input-error_active'
 };
-import '../pages/index.css';
+
 const initialCards = [
     {
         name: 'Архыз',
@@ -50,19 +52,15 @@ const initialCards = [
     }
 ];
 
-import Card from "./components/Card.js";
-import FormValidator from "./components/FormValidator.js"
-import Section from "./components/Section.js"
-import PopupWithImage from "./components/PopupWithImage.js"
-import PopupWithForm from "./components/PopupWithForm.js";
-import UserInfo from "./components/UserInfo.js";
-
-
-const profileValidator = new FormValidator(object, formProfile);
+const profileValidator = new FormValidator(validationConfig, formProfile);
 profileValidator.enableValidation()
-
-const placeValidator = new FormValidator(object, formPlace);
+const placeValidator = new FormValidator(validationConfig, formPlace);
 placeValidator.enableValidation()
+const popupWithImg = new PopupWithImage(popupPhoto)
+const userInfo = new UserInfo({
+    userName: '.profile__user-name',
+    userProf: '.profile__user-profession'
+})
 
 const defaultCardList = new Section({
     items: initialCards,
@@ -70,7 +68,6 @@ const defaultCardList = new Section({
         const card = new Card({
             data: item,
             handleCardClick: () => {
-                const popupWithImg = new PopupWithImage(popupPhoto)
                 popupWithImg.open(item)
                 popupWithImg.setEventListeners()
             }
@@ -79,46 +76,33 @@ const defaultCardList = new Section({
         defaultCardList.addItem(cardElement)
     }
 }, elements)
-defaultCardList.renderItems()
-
 const formOfProfile = new PopupWithForm({
     popupSelector: popupProfile,
     handleFormSubmit: (obj) => {
-        const userInfo = new UserInfo({
-            userName: editName,
-            userProf: editJob
-        })
         userInfo.setUserInfo(obj)
         formOfProfile.close();
         profileValidator.resetValidation()
     }
 })
-formOfProfile.setEventListeners()
-
 const formOfPlace = new PopupWithForm({
     popupSelector: popupPlace,
     handleFormSubmit: (obj) => {
         const addedCard = new Card({
             data: obj,
             handleCardClick: () => {
-                const addedPopupWithImg = new PopupWithImage(popupPhoto)
-                addedPopupWithImg.open(obj)
-                addedPopupWithImg.setEventListeners()
+                popupWithImg.open(obj)
+                popupWithImg.setEventListeners()
             }
         }, '.element-template')
         elements.prepend(addedCard.generateCard());
     }
 })
-formOfPlace.setEventListeners()
+
 
 function editProfile() {
-    const newUserData = new UserInfo({
-        userName: editName,
-        userProf: editJob
-    })
-    const userInfo = newUserData.getUserInfo()
-    nameInput.value = userInfo.userName;
-    jobInput.value = userInfo.userProf;
+    const userData = userInfo.getUserInfo()
+    nameInput.value = userData.userName;
+    jobInput.value = userData.userProf;
     formOfProfile.open();
     profileValidator.resetValidation()
 };
@@ -128,5 +112,11 @@ function openPlace() {
     formOfPlace.open()
 };
 
+
 addBtn.addEventListener('click', openPlace);
 editBtn.addEventListener('click', editProfile);
+
+
+defaultCardList.renderItems()
+formOfPlace.setEventListeners()
+formOfProfile.setEventListeners()
