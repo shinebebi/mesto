@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: './src/pages/index.js',
+    target: 'es5',
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),
@@ -13,9 +14,7 @@ module.exports = {
             {
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: 'babel-loader',
-                }
+                use: 'babel-loader'
             },
             {
                 test: /\.css$/i,
