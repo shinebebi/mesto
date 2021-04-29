@@ -1,9 +1,12 @@
+import PopupWithConfirm from "./PopupWithConfirm.js";
+
 export default class Card {
     constructor({ data, handleCardClick }, cardSelector) {
         this._name = data.name;
         this._link = data.link;
         this._cardSelector = cardSelector;
         this._handleCardClick = handleCardClick;
+        this._confirmPopup = document.querySelector('.popup_confirm')
     }
 
     _getTemplate() {
@@ -30,7 +33,14 @@ export default class Card {
     }
 
     _handleDeleteCard() {
-        this._element.remove();
+        const confMessage = new PopupWithConfirm({
+            popupSelector: this._confirmPopup,
+            handleDeleteCard: () => {
+                this._element.remove();
+            }
+        })
+        confMessage.open()
+        confMessage.setEventListeners()
     }
 
     _setEventListeners() {
