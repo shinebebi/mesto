@@ -6,6 +6,7 @@ import PopupWithImage from "../components/PopupWithImage.js"
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import PopupWithUpdateAvatar from "../components/PopupWithUpdateAvatar.js";
+import Api from "../components/Api.js";
 
 
 const editBtn = document.querySelector('.profile__edit-btn');
@@ -29,34 +30,17 @@ const validationConfig = {
     inactiveButtonClass: 'popup__submit-btn_inactive',
     errorClass: 'popup__input-error_active'
 };
-
-const initialCards = [
-    {
-        name: 'Архыз',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-        name: 'Челябинская область',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-        name: 'Иваново',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-        name: 'Камчатка',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-        name: 'Холмогорский район',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-        name: 'Байкал',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+const api = new Api({
+    userInfoUrl: 'https://mesto.nomoreparties.co/v1/cohort-23/users/me',
+    cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort-23/cards',
+    avatarUrl: 'https://mesto.nomoreparties.co/v1/cohort-23/users/me/avatar',
+    headers: {
+        authorization: '719c96ea-a9a1-4af2-9528-c9183661c210',
     }
-];
+});
+api.getUserInfo()
 
+const pr = api.getInitialCards()
 const profileValidator = new FormValidator(validationConfig, formProfile);
 profileValidator.enableValidation()
 const placeValidator = new FormValidator(validationConfig, formPlace);
@@ -71,39 +55,47 @@ const userInfo = new UserInfo({
 const avatarInfo = new PopupWithUpdateAvatar({
     userAvatar: '.profile__avatar'
 })
-const defaultCardList = new Section({
-    items: initialCards,
-    renderer: (item) => {
-        const card = new Card({
-            data: item,
-            handleCardClick: () => {
-                popupWithImg.open(item)
-                popupWithImg.setEventListeners()
-            }
-        }, '.element-template');
-        const cardElement = card.generateCard()
-        defaultCardList.addItem(cardElement)
-    }
-}, elements)
+pr.then(data => {
+    const defaultCardList = new Section({
+        items: data,
+        renderer: (item) => {
+            const card = new Card({
+                data: item,
+                handleCardClick: () => {
+                    popupWithImg.open(item)
+                    popupWithImg.setEventListeners()
+                },
+            }, '.element-template');
+            const cardElement = card.generateCard()
+            defaultCardList.addItem(cardElement)
+        }
+    }, elements)
+    defaultCardList.renderItems()
+})
 const formOfProfile = new PopupWithForm({
     popupSelector: popupProfile,
     handleFormSubmit: (obj) => {
         userInfo.setUserInfo(obj)
         formOfProfile.close();
+        api.editProfile()
         profileValidator.resetValidation()
+        api.editProfile().finally(() => {formOfProfile.renderLoading(false)})
     }
 })
 const formOfPlace = new PopupWithForm({
     popupSelector: popupPlace,
     handleFormSubmit: (obj) => {
-        const addedCard = new Card({
-            data: obj,
-            handleCardClick: () => {
-                popupWithImg.open(obj)
-                popupWithImg.setEventListeners()
-            }
-        }, '.element-template')
-        elements.prepend(addedCard.generateCard());
+        api.addCard(obj).then(cardInfo => {
+            const addedCard = new Card({
+                data: cardInfo,
+                handleCardClick: () => {
+                    popupWithImg.open(cardInfo)
+                    popupWithImg.setEventListeners()
+                }
+            }, '.element-template')
+            elements.prepend(addedCard.generateCard());
+        })
+        api.editProfile().finally(() => {formOfPlace.renderLoading(false)})
     }
 })
 
@@ -112,7 +104,9 @@ const formOfAvatar = new PopupWithForm({
     handleFormSubmit: (obj) => {
         avatarInfo.setAvatarInfo(obj)
         formOfAvatar.close()
+        api.avatarUpdate()
         avatarValidator.resetValidation()
+        api.editProfile().finally(() => {formOfAvatar.renderLoading(false)})
     }
 })
 function editProfile() {
@@ -139,7 +133,6 @@ addBtn.addEventListener('click', openPlace);
 editBtn.addEventListener('click', editProfile);
 avatarBtn.addEventListener('click', updateAvatar)
 
-defaultCardList.renderItems()
 formOfPlace.setEventListeners()
 formOfProfile.setEventListeners()
 formOfAvatar.setEventListeners()
