@@ -5,21 +5,15 @@ export default class Api {
         this._avatarUrl = options.avatarUrl
         this._headers = options.headers
         this._token = this._headers.authorization
-        this._name = document.querySelector('.profile__user-name')
-        this._job = document.querySelector('.profile__user-profession')
-        this._avatar = document.querySelector('.profile__avatar')
     }
 
     getUserInfo() {
-        fetch(this._userInfoUrl, {
+        return fetch(this._userInfoUrl, {
             headers: {
                 authorization: this._token
             }
         })
             .then(res => res.json())
-            .then(userData => {
-                this._setUserProfile(userData);
-            })
             .catch(err => {
                 console.log(err);
             })
@@ -76,7 +70,7 @@ export default class Api {
     }
 
     deleteCard(cardId) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-23/cards/${cardId}`, {
+        return fetch(`https://mesto.nomoreparties.co/v1/cohort-24/cards/${cardId}`, {
             method: 'DELETE',
             headers: {
                 authorization: this._token,
@@ -89,7 +83,7 @@ export default class Api {
     }
 
     putLike(cardId) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-23/cards/likes/${cardId}`, {
+        return fetch(`https://mesto.nomoreparties.co/v1/cohort-24/cards/likes/${cardId}`, {
             method: 'PUT',
             headers: {
                 authorization: this._token,
@@ -102,7 +96,7 @@ export default class Api {
     }
 
     deleteLike(cardId) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-23/cards/likes/${cardId}`, {
+        return fetch(`https://mesto.nomoreparties.co/v1/cohort-24/cards/likes/${cardId}`, {
             method: 'DELETE',
             headers: {
                 authorization: this._token,
@@ -128,11 +122,5 @@ export default class Api {
             .catch(err => {
                 console.log(err)
             })
-    }
-
-    _setUserProfile(arg) {
-        this._name.textContent = arg.name;
-        this._job.textContent = arg.about;
-        this._avatar.src = arg.avatar;
     }
 }

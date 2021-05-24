@@ -23,6 +23,9 @@ const popupProfile = document.querySelector('.popup_profile');
 const popupPlace = document.querySelector('.popup_place');
 const popupPhoto = document.querySelector('.photo-popup');
 const elements = document.querySelector('.elements');
+const userName = document.querySelector('.profile__user-name');
+const userJob = document.querySelector('.profile__user-profession');
+const userAvatar = document.querySelector('.profile__avatar');
 
 const validationConfig = {
     inputElement: '.popup__field',
@@ -31,16 +34,21 @@ const validationConfig = {
     errorClass: 'popup__input-error_active'
 };
 const api = new Api({
-    userInfoUrl: 'https://mesto.nomoreparties.co/v1/cohort-23/users/me',
-    cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort-23/cards',
-    avatarUrl: 'https://mesto.nomoreparties.co/v1/cohort-23/users/me/avatar',
+    userInfoUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/users/me',
+    cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/cards',
+    avatarUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/users/me/avatar',
     headers: {
-        authorization: '719c96ea-a9a1-4af2-9528-c9183661c210',
+        authorization: '9228721e-70d8-4ca7-93f1-0cae3a5cafe4',
     }
 });
-api.getUserInfo()
 
-const pr = api.getInitialCards()
+api.getUserInfo().then(userData => {
+    userName.textContent = userData.name;
+    userJob.textContent = userData.about;
+    userAvatar.src = userData.avatar;
+})
+
+const getInitCards = api.getInitialCards()
 const profileValidator = new FormValidator(validationConfig, formProfile);
 profileValidator.enableValidation()
 const placeValidator = new FormValidator(validationConfig, formPlace);
@@ -55,7 +63,7 @@ const userInfo = new UserInfo({
 const avatarInfo = new PopupWithUpdateAvatar({
     userAvatar: '.profile__avatar'
 })
-pr.then(data => {
+getInitCards.then(data => {
     const defaultCardList = new Section({
         items: data,
         renderer: (item) => {
@@ -64,7 +72,7 @@ pr.then(data => {
                 handleCardClick: () => {
                     popupWithImg.open(item)
                     popupWithImg.setEventListeners()
-                },
+                }
             }, '.element-template');
             const cardElement = card.generateCard()
             defaultCardList.addItem(cardElement)

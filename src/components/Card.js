@@ -1,15 +1,15 @@
 import PopupWithConfirm from "./PopupWithConfirm.js";
 import Api from "./Api.js";
 const api = new Api({
-    userInfoUrl: 'https://mesto.nomoreparties.co/v1/cohort-23/users/me',
-    cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort-23/cards',
-    avatarUrl: 'https://mesto.nomoreparties.co/v1/cohort-23/users/me/avatar',
+    userInfoUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/users/me',
+    cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/cards',
+    avatarUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/users/me/avatar',
     headers: {
-        authorization: '719c96ea-a9a1-4af2-9528-c9183661c210',
+        authorization: '9228721e-70d8-4ca7-93f1-0cae3a5cafe4',
     }
 });
 export default class Card {
-    constructor({ data, handleCardClick }, cardSelector) {
+    constructor({ data, handleCardClick}, cardSelector) {
         this._name = data.name;
         this._link = data.link;
         this._id = data._id;
@@ -36,11 +36,11 @@ export default class Card {
         this._element.querySelector('.element__name').textContent = this._name;
         elementPhoto.src = this._link;
         elementPhoto.alt = this._name;
-        if (this._likeNumber.some(e => e._id === '60addd4aea64534c409072fd')) {
+        if (this._likeNumber.some(e => e._id === '38a418429f851f9e8aa69b21')) {
             this._element.querySelector('.element__like-btn').classList.add('element__like-btn_active')
         }
         this._element.querySelector('.element__like-number').textContent = this._likeNumber.length;
-        if (this._ownerId === '60addd4aea64534c409072fd') {
+        if (this._ownerId === '38a418429f851f9e8aa69b21') {
             this._element.querySelector('.element__trash-btn').classList.add('element__trash-btn_active')
         }
         return this._element;
@@ -64,7 +64,7 @@ export default class Card {
             popupSelector: this._confirmPopup,
             handleDeleteCard: () => {
                 api.deleteCard(this._id)
-                this._element.remove();
+                    .then(() => this._element.remove())
             }
         })
         confMessage.open()
@@ -77,6 +77,7 @@ export default class Card {
         });
         this._element.querySelector('.element__trash-btn').addEventListener('click', () => {
             this._handleDeleteCard()
+
         });
         this._cardImage = this._element.querySelector('.element__photo')
         this._cardImage.addEventListener('click', () => {
