@@ -1,13 +1,5 @@
 import PopupWithConfirm from "./PopupWithConfirm.js";
-import Api from "./Api.js";
-const api = new Api({
-    userInfoUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/users/me',
-    cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/cards',
-    avatarUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/users/me/avatar',
-    headers: {
-        authorization: '9228721e-70d8-4ca7-93f1-0cae3a5cafe4',
-    }
-});
+import {api} from '../pages/index.js'
 export default class Card {
     constructor({ data, handleCardClick}, cardSelector) {
         this._name = data.name;
@@ -36,13 +28,16 @@ export default class Card {
         this._element.querySelector('.element__name').textContent = this._name;
         elementPhoto.src = this._link;
         elementPhoto.alt = this._name;
-        if (this._likeNumber.some(e => e._id === '38a418429f851f9e8aa69b21')) {
-            this._element.querySelector('.element__like-btn').classList.add('element__like-btn_active')
-        }
         this._element.querySelector('.element__like-number').textContent = this._likeNumber.length;
-        if (this._ownerId === '38a418429f851f9e8aa69b21') {
-            this._element.querySelector('.element__trash-btn').classList.add('element__trash-btn_active')
-        }
+        api.getUserInfo()
+            .then(data => {
+                if (this._ownerId === data._id) {
+                    this._element.querySelector('.element__trash-btn').classList.add('element__trash-btn_active')
+                }
+                if (this._likeNumber.some(e => e._id === data._id)) {
+                    this._element.querySelector('.element__like-btn').classList.add('element__like-btn_active')
+                }
+            })
         return this._element;
     }
 
@@ -52,9 +47,11 @@ export default class Card {
         if (this._likeIconActive) {
             this._likesNumber.textContent = String(Number(this._likesNumber.textContent) - 1)
             api.deleteLike(this._id)
+                .catch(err => console.log(err))
         } else {
             this._likesNumber.textContent = String(Number(this._likesNumber.textContent) + 1)
             api.putLike(this._id)
+                .catch(err => console.log(err))
         }
         this._element.querySelector('.element__like-btn').classList.toggle('element__like-btn_active');
     }
@@ -65,6 +62,7 @@ export default class Card {
             handleDeleteCard: () => {
                 api.deleteCard(this._id)
                     .then(() => this._element.remove())
+                    .catch(err => console.log(err))
             }
         })
         confMessage.open()

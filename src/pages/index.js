@@ -5,9 +5,7 @@ import Section from "../components/Section.js"
 import PopupWithImage from "../components/PopupWithImage.js"
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
-import PopupWithUpdateAvatar from "../components/PopupWithUpdateAvatar.js";
 import Api from "../components/Api.js";
-
 
 const editBtn = document.querySelector('.profile__edit-btn');
 const addBtn = document.querySelector('.profile__add-btn');
@@ -34,21 +32,12 @@ const validationConfig = {
     errorClass: 'popup__input-error_active'
 };
 const api = new Api({
-    userInfoUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/users/me',
-    cardsUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/cards',
-    avatarUrl: 'https://mesto.nomoreparties.co/v1/cohort-24/users/me/avatar',
+    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-24',
     headers: {
         authorization: '9228721e-70d8-4ca7-93f1-0cae3a5cafe4',
     }
 });
-
-api.getUserInfo().then(userData => {
-    userName.textContent = userData.name;
-    userJob.textContent = userData.about;
-    userAvatar.src = userData.avatar;
-})
-
-const getInitCards = api.getInitialCards()
+export {api}
 const profileValidator = new FormValidator(validationConfig, formProfile);
 profileValidator.enableValidation()
 const placeValidator = new FormValidator(validationConfig, formPlace);
@@ -58,63 +47,73 @@ avatarValidator.enableValidation()
 const popupWithImg = new PopupWithImage(popupPhoto)
 const userInfo = new UserInfo({
     userName: '.profile__user-name',
-    userProf: '.profile__user-profession'
-})
-const avatarInfo = new PopupWithUpdateAvatar({
+    userProf: '.profile__user-profession',
     userAvatar: '.profile__avatar'
 })
-getInitCards.then(data => {
-    const defaultCardList = new Section({
-        items: data,
-        renderer: (item) => {
-            const card = new Card({
-                data: item,
-                handleCardClick: () => {
-                    popupWithImg.open(item)
-                    popupWithImg.setEventListeners()
-                }
-            }, '.element-template');
-            const cardElement = card.generateCard()
-            defaultCardList.addItem(cardElement)
+
+function newCard (item) {
+    return new Card({
+        data: item,
+        handleCardClick: () => {
+            popupWithImg.open(item)
+            popupWithImg.setEventListeners()
         }
-    }, elements)
-    defaultCardList.renderItems()
-})
+    }, '.element-template')
+}
+
+Promise.all([api.getInitialCards(), api.getUserInfo()])
+    .then(data => {
+        userName.textContent = data[1].name;
+        userJob.textContent = data[1].about;
+        userAvatar.src = data[1].avatar;
+        const defaultCardList = new Section({
+            items: data[0],
+            renderer: (item) => {
+                const card = newCard(item)
+                const cardElement = card.generateCard()
+                defaultCardList.addItem(cardElement)
+            }
+        }, elements)
+        defaultCardList.renderItems()
+        return defaultCardList
+    })
+    .catch(err => console.log(err))
+
 const formOfProfile = new PopupWithForm({
     popupSelector: popupProfile,
     handleFormSubmit: (obj) => {
         userInfo.setUserInfo(obj)
         formOfProfile.close();
         api.editProfile()
+            .then(() => formOfProfile.close())
+            .catch(err => console.log(err))
+            .finally(() => {formOfProfile.renderLoading(false)})
         profileValidator.resetValidation()
-        api.editProfile().finally(() => {formOfProfile.renderLoading(false)})
     }
 })
 const formOfPlace = new PopupWithForm({
     popupSelector: popupPlace,
     handleFormSubmit: (obj) => {
-        api.addCard(obj).then(cardInfo => {
-            const addedCard = new Card({
-                data: cardInfo,
-                handleCardClick: () => {
-                    popupWithImg.open(cardInfo)
-                    popupWithImg.setEventListeners()
-                }
-            }, '.element-template')
-            elements.prepend(addedCard.generateCard());
-        })
-        api.editProfile().finally(() => {formOfPlace.renderLoading(false)})
+        api.addCard(obj)
+            .then(cardInfo => {
+                const addedCard = newCard(cardInfo)
+                elements.prepend(addedCard.generateCard());
+            })
+            .then(() => formOfPlace.close())
+            .catch(err => console.log(err))
+            .finally(() => {formOfPlace.renderLoading(false)})
     }
 })
 
 const formOfAvatar = new PopupWithForm({
     popupSelector: popupAvatar,
     handleFormSubmit: (obj) => {
-        avatarInfo.setAvatarInfo(obj)
-        formOfAvatar.close()
+        userInfo.setAvatarInfo(obj)
         api.avatarUpdate()
+            .then(() => formOfAvatar.close())
+            .catch(err => console.log(err))
+            .finally(() => {formOfAvatar.renderLoading(false)})
         avatarValidator.resetValidation()
-        api.editProfile().finally(() => {formOfAvatar.renderLoading(false)})
     }
 })
 function editProfile() {
@@ -131,7 +130,7 @@ function openPlace() {
 };
 
 function updateAvatar() {
-    const avatarData = avatarInfo.getAvatarInfo()
+    const avatarData = userInfo.getAvatarInfo()
     avatarUrlInput.value = avatarData.userAvatar;
     formOfAvatar.open()
     avatarValidator.resetValidation()

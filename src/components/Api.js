@@ -1,41 +1,41 @@
 export default class Api {
     constructor(options) {
-        this._userInfoUrl = options.userInfoUrl
-        this._cardsUrl = options.cardsUrl
-        this._avatarUrl = options.avatarUrl
         this._headers = options.headers
         this._token = this._headers.authorization
+        this._baseUrl = options.baseUrl
+        this._name = document.querySelector('.profile__user-name')
+        this._job = document.querySelector('.profile__user-profession')
+        this._avatar = document.querySelector('.profile__avatar')
+    }
+
+    _getResponseData(res) {
+        if (!res.ok) {
+            return Promise.reject(`Ошибка: ${res.status}`);
+        }
+        return res.json();
     }
 
     getUserInfo() {
-        return fetch(this._userInfoUrl, {
+        return fetch(`${this._baseUrl}/users/me`, {
             headers: {
                 authorization: this._token
             }
         })
-            .then(res => res.json())
-            .catch(err => {
-                console.log(err);
-            })
+            .then(res => this._getResponseData(res))
     }
 
     getInitialCards() {
-        return fetch(this._cardsUrl, {
+        return fetch(`${this._baseUrl}/cards`, {
             headers: {
                 authorization: this._token,
                 'content-type': 'application/json'
             }
         })
-            .then(res => {
-                return res.json();
-            })
-            .catch(err => {
-                console.log(err);
-            })
+            .then(res => this._getResponseData(res))
     }
 
     editProfile() {
-        return fetch(this._userInfoUrl, {
+        return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             headers: {
                 authorization: this._token,
@@ -46,13 +46,10 @@ export default class Api {
                 about: this._job.textContent
             })
         })
-            .catch(err => {
-                console.log(err)
-            })
     }
 
     addCard(cardData) {
-        return fetch(this._cardsUrl, {
+        return fetch(`${this._baseUrl}/cards`, {
             method: 'POST',
             headers: {
                 authorization: this._token,
@@ -63,53 +60,41 @@ export default class Api {
                 link: cardData.link
             })
         })
-            .then(res => res.json())
-            .catch(err => {
-                console.log(err)
-            })
+            .then(res => this._getResponseData(res))
     }
 
     deleteCard(cardId) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-24/cards/${cardId}`, {
+        return fetch(`${this._baseUrl}/cards/${cardId}`, {
             method: 'DELETE',
             headers: {
                 authorization: this._token,
                 'Content-Type': 'application/json'
             }
         })
-            .catch(err => {
-                console.log(err)
-            })
     }
 
     putLike(cardId) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-24/cards/likes/${cardId}`, {
+        return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
             method: 'PUT',
             headers: {
                 authorization: this._token,
                 'Content-Type': 'application/json'
             }
         })
-            .catch(err => {
-                console.log(err)
-            })
     }
 
     deleteLike(cardId) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-24/cards/likes/${cardId}`, {
+        return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
             method: 'DELETE',
             headers: {
                 authorization: this._token,
                 'Content-Type': 'application/json'
             }
         })
-            .catch(err => {
-                console.log(err)
-            })
     }
 
     avatarUpdate() {
-        return fetch(this._avatarUrl, {
+        return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: 'PATCH',
             headers: {
                 authorization: this._token,

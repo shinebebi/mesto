@@ -1,5 +1,4 @@
 import Popup from "./Popup.js";
-
 export default class PopupWithForm extends Popup {
     constructor({popupSelector, handleFormSubmit}) {
         super(popupSelector);
@@ -22,7 +21,6 @@ export default class PopupWithForm extends Popup {
         this._fieldsList.forEach(field => {
             this._valuesOfField[field.name] = field.value
         })
-        this.close()
         return this._valuesOfField
     }
     renderLoading(isLoading) {

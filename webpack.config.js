@@ -7,7 +7,10 @@ module.exports = {
     target: 'es5',
     output: {
         filename: 'main.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist')
+    },
+    devServer: {
+        open: true
     },
     module: {
         rules: [
