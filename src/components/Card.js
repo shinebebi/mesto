@@ -1,4 +1,3 @@
-import PopupWithConfirm from "./PopupWithConfirm.js";
 import {api} from "../pages/index.js"
 export default class Card {
     constructor({ data, handleCardClick, openConfMessage}, cardSelector) {
@@ -10,7 +9,6 @@ export default class Card {
         this._cardSelector = cardSelector;
         this._handleCardClick = handleCardClick;
         this._openConfMessage = openConfMessage;
-        //this._confirmPopup = document.querySelector('.popup_confirm')
     }
 
     _getTemplate() {
@@ -62,9 +60,7 @@ export default class Card {
     }
 
     handleDeleteCard() {
-        api.deleteCard(this._id)
-            .then(() => this._element.remove())
-            .catch(err => console.log(err))
+        this._element.remove()
     }
 
     _setEventListeners() {
@@ -73,7 +69,6 @@ export default class Card {
         });
         this._element.querySelector('.element__trash-btn').addEventListener('click', () => {
             this._openConfMessage(this._element)
-            //this.handleDeleteCard()
         });
         this._cardImage = this._element.querySelector('.element__photo')
         this._cardImage.addEventListener('click', () => {

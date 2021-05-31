@@ -15,13 +15,11 @@ export default class PopupWithConfirm extends Popup {
     _handler(evt) {
         evt.preventDefault()
         this._deleteCard(this._cardArray[0])
-        this.close()
     }
 
     close() {
         super.close();
         this._cardArray = []
-        this._confirmMessage.removeEventListener('submit', this._handler);
     }
 
     setEventListeners() {

@@ -61,7 +61,6 @@ function newCard (item) {
         openConfMessage: () => {
             confMessage.open()
             confMessage.getCard(card)
-            confMessage.setEventListeners()
         }
     }, '.element-template')
     return card
@@ -127,7 +126,12 @@ const formOfAvatar = new PopupWithForm({
 const confMessage = new PopupWithConfirm({
     popupSelector: document.querySelector('.popup_confirm'),
     handleDeleteCard: (elem) => {
-        elem.handleDeleteCard()
+        api.deleteCard(elem._id)
+            .then(() => {
+                elem.handleDeleteCard();
+                confMessage.close();
+            })
+            .catch(err => console.log(err));
     }
 })
 
@@ -156,3 +160,4 @@ avatarBtn.addEventListener('click', updateAvatar)
 formOfPlace.setEventListeners()
 formOfProfile.setEventListeners()
 formOfAvatar.setEventListeners()
+confMessage.setEventListeners()

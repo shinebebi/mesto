@@ -46,6 +46,7 @@ export default class Api {
                 about: this._job.value
             })
         })
+            .then(res => this._getResponseData(res))
     }
 
     addCard(cardData) {
@@ -71,6 +72,7 @@ export default class Api {
                 'Content-Type': 'application/json'
             }
         })
+            .then(res => this._getResponseData(res))
     }
 
     putLike(cardId) {
@@ -81,6 +83,7 @@ export default class Api {
                 'Content-Type': 'application/json'
             }
         })
+            .then(res => this._getResponseData(res))
     }
 
     deleteLike(cardId) {
@@ -91,6 +94,7 @@ export default class Api {
                 'Content-Type': 'application/json'
             }
         })
+            .then(res => this._getResponseData(res))
     }
 
     avatarUpdate() {
@@ -104,5 +108,6 @@ export default class Api {
                 avatar: this._avatar.value
             })
         })
+            .then(res => this._getResponseData(res))
     }
 }
