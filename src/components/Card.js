@@ -1,7 +1,7 @@
 import PopupWithConfirm from "./PopupWithConfirm.js";
-import {api} from '../pages/index.js'
+import {api} from "../pages/index.js"
 export default class Card {
-    constructor({ data, handleCardClick}, cardSelector) {
+    constructor({ data, handleCardClick, openConfMessage}, cardSelector) {
         this._name = data.name;
         this._link = data.link;
         this._id = data._id;
@@ -9,7 +9,8 @@ export default class Card {
         this._likeNumber = data.likes;
         this._cardSelector = cardSelector;
         this._handleCardClick = handleCardClick;
-        this._confirmPopup = document.querySelector('.popup_confirm')
+        this._openConfMessage = openConfMessage;
+        //this._confirmPopup = document.querySelector('.popup_confirm')
     }
 
     _getTemplate() {
@@ -45,28 +46,25 @@ export default class Card {
         this._likesNumber = this._element.querySelector('.element__like-number')
         this._likeIconActive = this._element.querySelector('.element__like-btn_active')
         if (this._likeIconActive) {
-            this._likesNumber.textContent = String(Number(this._likesNumber.textContent) - 1)
             api.deleteLike(this._id)
+                .then(() => {
+                    this._likesNumber.textContent = String(Number(this._likesNumber.textContent) - 1)
+                })
                 .catch(err => console.log(err))
         } else {
-            this._likesNumber.textContent = String(Number(this._likesNumber.textContent) + 1)
             api.putLike(this._id)
+                .then(() => {
+                    this._likesNumber.textContent = String(Number(this._likesNumber.textContent) + 1)
+                })
                 .catch(err => console.log(err))
         }
         this._element.querySelector('.element__like-btn').classList.toggle('element__like-btn_active');
     }
 
-    _handleDeleteCard() {
-        const confMessage = new PopupWithConfirm({
-            popupSelector: this._confirmPopup,
-            handleDeleteCard: () => {
-                api.deleteCard(this._id)
-                    .then(() => this._element.remove())
-                    .catch(err => console.log(err))
-            }
-        })
-        confMessage.open()
-        confMessage.setEventListeners()
+    handleDeleteCard() {
+        api.deleteCard(this._id)
+            .then(() => this._element.remove())
+            .catch(err => console.log(err))
     }
 
     _setEventListeners() {
@@ -74,8 +72,8 @@ export default class Card {
             this._handleLikeCard()
         });
         this._element.querySelector('.element__trash-btn').addEventListener('click', () => {
-            this._handleDeleteCard()
-
+            this._openConfMessage(this._element)
+            //this.handleDeleteCard()
         });
         this._cardImage = this._element.querySelector('.element__photo')
         this._cardImage.addEventListener('click', () => {

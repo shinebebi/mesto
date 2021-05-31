@@ -3,9 +3,9 @@ export default class Api {
         this._headers = options.headers
         this._token = this._headers.authorization
         this._baseUrl = options.baseUrl
-        this._name = document.querySelector('.profile__user-name')
-        this._job = document.querySelector('.profile__user-profession')
-        this._avatar = document.querySelector('.profile__avatar')
+        this._name = document.querySelector('.popup__field_user-name')
+        this._job = document.querySelector('.popup__field_user-job')
+        this._avatar = document.querySelector('.popup__field_avatar-url')
     }
 
     _getResponseData(res) {
@@ -42,8 +42,8 @@ export default class Api {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: this._name.textContent,
-                about: this._job.textContent
+                name: this._name.value,
+                about: this._job.value
             })
         })
     }
@@ -101,11 +101,8 @@ export default class Api {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                avatar: this._avatar.src
+                avatar: this._avatar.value
             })
         })
-            .catch(err => {
-                console.log(err)
-            })
     }
 }

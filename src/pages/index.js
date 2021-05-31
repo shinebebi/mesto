@@ -6,12 +6,12 @@ import PopupWithImage from "../components/PopupWithImage.js"
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api.js";
+import PopupWithConfirm from "../components/PopupWithConfirm.js";
 
 const editBtn = document.querySelector('.profile__edit-btn');
 const addBtn = document.querySelector('.profile__add-btn');
 const avatarBtn = document.querySelector('.profile__avatar-btn');
 const formAvatar = document.querySelector('.popup__container_update-avatar')
-const avatarUrlInput = document.querySelector('.popup__field_avatar-url')
 const popupAvatar = document.querySelector('.popup_update-avatar')
 const formProfile = document.querySelector('.popup__container_profile');
 const formPlace = document.querySelector('.popup__container_place');
@@ -52,15 +52,21 @@ const userInfo = new UserInfo({
 })
 
 function newCard (item) {
-    return new Card({
+    const card = new Card({
         data: item,
         handleCardClick: () => {
             popupWithImg.open(item)
             popupWithImg.setEventListeners()
+        },
+        openConfMessage: () => {
+            confMessage.open()
+            confMessage.getCard(card)
+            confMessage.setEventListeners()
         }
     }, '.element-template')
+    return card
 }
-
+const cardListClass = []
 Promise.all([api.getInitialCards(), api.getUserInfo()])
     .then(data => {
         userName.textContent = data[1].name;
@@ -75,20 +81,20 @@ Promise.all([api.getInitialCards(), api.getUserInfo()])
             }
         }, elements)
         defaultCardList.renderItems()
-        return defaultCardList
+        cardListClass.push(defaultCardList)
     })
     .catch(err => console.log(err))
 
 const formOfProfile = new PopupWithForm({
     popupSelector: popupProfile,
     handleFormSubmit: (obj) => {
-        userInfo.setUserInfo(obj)
-        formOfProfile.close();
         api.editProfile()
-            .then(() => formOfProfile.close())
+            .then(() => {
+                userInfo.setUserInfo(obj)
+                formOfProfile.close()
+            })
             .catch(err => console.log(err))
             .finally(() => {formOfProfile.renderLoading(false)})
-        profileValidator.resetValidation()
     }
 })
 const formOfPlace = new PopupWithForm({
@@ -96,10 +102,10 @@ const formOfPlace = new PopupWithForm({
     handleFormSubmit: (obj) => {
         api.addCard(obj)
             .then(cardInfo => {
-                const addedCard = newCard(cardInfo)
-                elements.prepend(addedCard.generateCard());
+                const addedCard = newCard(cardInfo);
+                cardListClass[0].addNewItem(addedCard.generateCard())
+                formOfPlace.close()
             })
-            .then(() => formOfPlace.close())
             .catch(err => console.log(err))
             .finally(() => {formOfPlace.renderLoading(false)})
     }
@@ -108,14 +114,23 @@ const formOfPlace = new PopupWithForm({
 const formOfAvatar = new PopupWithForm({
     popupSelector: popupAvatar,
     handleFormSubmit: (obj) => {
-        userInfo.setAvatarInfo(obj)
         api.avatarUpdate()
-            .then(() => formOfAvatar.close())
+            .then(() => {
+                userInfo.setAvatarInfo(obj)
+                formOfAvatar.close()
+            })
             .catch(err => console.log(err))
             .finally(() => {formOfAvatar.renderLoading(false)})
-        avatarValidator.resetValidation()
     }
 })
+
+const confMessage = new PopupWithConfirm({
+    popupSelector: document.querySelector('.popup_confirm'),
+    handleDeleteCard: (elem) => {
+        elem.handleDeleteCard()
+    }
+})
+
 function editProfile() {
     const userData = userInfo.getUserInfo()
     nameInput.value = userData.userName;
@@ -130,8 +145,6 @@ function openPlace() {
 };
 
 function updateAvatar() {
-    const avatarData = userInfo.getAvatarInfo()
-    avatarUrlInput.value = avatarData.userAvatar;
     formOfAvatar.open()
     avatarValidator.resetValidation()
 }

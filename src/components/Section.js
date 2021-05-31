@@ -5,6 +5,10 @@ export default class Section {
         this._container = containerSelector;
     }
 
+    addNewItem (item) {
+        this._container.prepend(item)
+    }
+
     addItem(item) {
         this._container.append(item);
     }
